@@ -1,5 +1,4 @@
 import React, { SyntheticEvent, useState } from "react";
-import { SyntheticEventData } from "react-dom/test-utils";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 
