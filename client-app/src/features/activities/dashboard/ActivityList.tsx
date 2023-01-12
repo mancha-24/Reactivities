@@ -1,29 +1,24 @@
+import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useState } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
 
-interface Props {
-    activities: Activity[];
-    deleteActivity: (id: string) => void;
-    submiting: boolean;
-}
+export default observer(function ActivityList() {
+    const {activityStore} = useStore();
+    const {deleteActivity, activitiesByDate, loading} = activityStore;
 
-export default function ActivityList({activities, deleteActivity, submiting}: Props) {
     const[target, setTarget] = useState('');
 
     function handleActivityDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name);
         deleteActivity(id);
     }
-    
-    const {activityStore} = useStore();
 
     return (
         <Segment>
             <Item.Group divaded>
                 {
-                    activities.map(activity => (
+                    activitiesByDate.map(activity => (
                         <Item key={activity.id}>
                             <Item.Content>
                                 <Item.Header as='a'>{activity.title}</Item.Header>
@@ -34,7 +29,7 @@ export default function ActivityList({activities, deleteActivity, submiting}: Pr
                                 </Item.Description>
                                 <Item.Extra>
                                     <Button onClick={() => activityStore.selectActivity(activity.id)} floated='right' content='view' color='blue' />
-                                    <Button loading={submiting && target === activity.id}
+                                    <Button loading={loading && target === activity.id}
                                             name={activity.id} 
                                             onClick={(e) => handleActivityDelete(e, activity.id)} 
                                             floated='right' 
@@ -49,4 +44,4 @@ export default function ActivityList({activities, deleteActivity, submiting}: Pr
             </Item.Group>
         </Segment>
     )
-}
+})
