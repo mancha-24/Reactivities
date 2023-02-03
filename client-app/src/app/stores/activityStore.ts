@@ -5,6 +5,7 @@ import {v4 as uuid} from 'uuid';
 import { act } from "@testing-library/react";
 import {format} from 'date-fns';
 import { store } from "./store";
+import { Profile } from "../models/profile";
 
 export default class ActivityStore {
     activityRegistry = new Map<string, Activity>();
@@ -138,6 +139,30 @@ export default class ActivityStore {
             runInAction(() => {
                 this.loading = false;
             })
+        }
+    }
+
+    updateAttendance = async () => {
+        const user = store.userStore.user;
+        this.loading = true;
+        try {
+            await agent.Activities.attend(this.selectedActivity!.id);
+            runInAction(() => {
+                if (this.selectedActivity?.isGoing) {
+                    this.selectedActivity.attendees = 
+                        this.selectedActivity.attendees?.filter(a => a.userName !== user?.userName);
+                    this.selectedActivity.isGoing = false;
+                } else {
+                    const attendee = new Profile(user!);
+                    this.selectedActivity?.attendees?.push(attendee);
+                    this.selectedActivity!.isGoing = true;
+                }
+                this.activityRegistry.set(this.selectedActivity!.id, this.selectedActivity!)
+            })
+        } catch (error) {
+            console.log(error);
+        } finally {
+            runInAction(() => this.loading = false);
         }
     }
  }
