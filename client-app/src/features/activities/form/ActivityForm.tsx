@@ -82,7 +82,6 @@ export default observer(function ActivityForm() {
                     );
                 }}
             </Formik>
-           
         </Segment>
     )
 })
