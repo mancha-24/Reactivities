@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosHeaders, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { Activity, ActivityFormValues } from '../models/activity';
 import { PaginatedResult } from '../models/pagination';
-import { Photo, Profile } from '../models/profile';
+import { Photo, Profile, UserActivity } from '../models/profile';
 import { User, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
@@ -103,7 +103,8 @@ const Profiles = {
     setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
     deletePhoto: (id: string) => requests.del(`/photos/${id}`),
     updateFollowing: (userName: string) => requests.post(`/follow/${userName}`, {}),
-    listFollowings: (userName: string, predicate: string) => requests.get<Profile[]>(`/follow/${userName}?predicate=${predicate}`)
+    listFollowings: (userName: string, predicate: string) => requests.get<Profile[]>(`/follow/${userName}?predicate=${predicate}`),
+    listActivities: (userName: string, predicate: string) => requests.get<UserActivity[]>(`/profiles/${userName}/activities?predicate=${predicate}`)
 }
 
 const agent = {
