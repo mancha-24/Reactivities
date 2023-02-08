@@ -1,5 +1,5 @@
 import { url } from "inspector";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Photo, Profile } from "../models/profile";
 import { store } from "./store";
@@ -11,9 +11,26 @@ export default class ProfileStore {
     loading = false;
     followings: Profile[] = [];
     loadingFollowings = false;
+    activeTab = 0;
 
     constructor(){
         makeAutoObservable(this);
+
+        reaction(
+            () => this.activeTab,
+            activeTab => {
+                if (activeTab === 3 || this.activeTab === 4) {
+                    const predicate = this.activeTab === 3 ? 'followers' : 'following';
+                    this.loadFollowings(predicate);
+                } else {
+                    this.followings = [];
+                }
+            }
+        )
+    }
+
+    setActiveTab = (activeTap: any) => {
+        this.activeTab = activeTap;
     }
 
     get isCurrentUser (){
@@ -99,9 +116,12 @@ export default class ProfileStore {
             await agent.Profiles.updateFollowing(userName);
             store.activityStore.updateAttendeeFollowing(userName);
             runInAction(() => {
-                if (this.profile && this.profile.userName !== store.userStore.user?.userName) {
+                if (this.profile && this.profile.userName !== store.userStore.user?.userName && this.profile.userName === userName) {
                     following ? this.profile.followersCount++ : this.profile.followersCount--
                     this.profile.following = !this.profile.following;
+                }
+                if (this.profile && this.profile.userName === store.userStore.user?.userName) {
+                    following ? this.profile.followersCount++ : this.profile.followingCount--;
                 }
                 this.followings.forEach(profile => {
                     if (profile.userName === userName) {
