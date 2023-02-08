@@ -9,6 +9,7 @@ export default class ProfileStore {
     loadingProfile = false;
     uploading = false;
     loading = false;
+    followings: Profile[] = [];
 
     constructor(){
         makeAutoObservable(this);
@@ -90,4 +91,28 @@ export default class ProfileStore {
             console.log(error);
         }   
     }
+
+    updateFollowing = async (userName: string, following: boolean) => {
+        this.loading = true;
+        try {
+            await agent.Profiles.updateFollowing(userName);
+            store.activityStore.updateAttendeeFollowing(userName);
+            runInAction(() => {
+                if (this.profile && this.profile.userName !== store.userStore.user?.userName) {
+                    following ? this.profile.followersCount++ : this.profile.followersCount--
+                    this.profile.following = !this.profile.following;
+                }
+                this.followings.forEach(profile => {
+                    if (profile.userName === userName) {
+                        profile.following ? profile.followersCount-- : profile.followersCount++;
+                        profile.following = !profile.following;
+                    }
+                })
+                this.loading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => this.loading = false);
+        }
+    } 
 }
