@@ -18,18 +18,33 @@ dotnet ef migrations add PostgresInitial -p Persistence -s API
 DOTNET Watch
 dotnet watch --no-hot-reload
 
+Docker GithubActions doc:
+github.com/docker/build-push-action
+
 
 React packages install:
 npm install react-infinite-scroller
+
 npm install react-cropper
+
 npm install react-dropzone 
+
 npm ls date-fns 
+
 npm install date-fns@2.29.3
+
 npm install react-datepicker
+
 npm install @types/react-datepicker --save-dev
+
 npm install yup
+
 npm install @types/yup --save-dev
+
 npm install formik
+
 npm install react-toastify
+
 npm install react-calendar
+
 npm install @types/react-calendar
