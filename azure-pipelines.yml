@@ -7,7 +7,7 @@ trigger:
 - azure-pipelines-build
 
 pool:
-  vmImage: 'ubuntu-lastest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   solution: '**/*.sln'
