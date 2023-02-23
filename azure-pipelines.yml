@@ -18,7 +18,7 @@ steps:
 - task: UseDotNet@2
   displayName: NET Core Version
   inputs:
-    version: '7.0'
+    version: '7.x'
     performMultiLevelLookup: true
     includePreviewVersions: true
 
