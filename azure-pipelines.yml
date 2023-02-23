@@ -42,3 +42,4 @@ steps:
     publishWebProjects: True
     arguments: '--configuration release --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
+- bash: ls -R $(Build.ArtifactStagingDirectory)
