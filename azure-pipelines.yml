@@ -38,7 +38,7 @@ jobs:
       command: publish
       publishWebProjects: True
       arguments: '--configuration release --output $(Build.ArtifactStagingDirectory)'
-      zipAfterPublish: False
+      zipAfterPublish: True
   #- bash: ls -R $(Build.ArtifactStagingDirectory)
   - task: PublishBuildArtifacts@1
     displayName: Publish Artifacts
