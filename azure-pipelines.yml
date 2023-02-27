@@ -12,59 +12,91 @@ variables:
   tag: '$(Build.BuildId)'
 
 jobs:
-- job: DockerHubPush
-  steps:
-  - task: Docker@2
-    displayName: DockerHub Build and Push
-    inputs:
-      containerRegistry: 'DockerHub'
-      repository: 'mancha24/reactivities'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
-      tags: '$(tag)'
-
-- job: ACRPush
-  steps:
-  - task: Docker@2
-    displayName: ACR Build and Push
-    inputs:
-      containerRegistry: 'ACR'
-      repository: 'titaniumacr/reactivities'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
-      tags: '$(tag)'
-
-- job: PublishArtifact
+- job: CreateMigrationScript
+  displayName: 'Create migration script'
+  condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'))
+  pool:
+    vmImage: 'ubuntu-20.04'
   steps:
   - task: UseDotNet@2
-    displayName: NET Core Version
+    displayName: 'Use .NET 5 Core sdk'
     inputs:
-      version: '7.x'
-      performMultiLevelLookup: true
+      version: 7.x
       includePreviewVersions: true
   - task: DotNetCoreCLI@2
-    displayName: Dotnet Restore
+    displayName: 'Install dotnet-ef'
     inputs:
-      command: restore
-      feedsToUse: select
-      #vstsFeed: 'my-vsts-feed' # A series of numbers and letters
-  - task: DotNetCoreCLI@2
-    displayName: Dotnet Build
+        command: 'custom'
+        custom: 'tool'
+        arguments: 'install --global dotnet-ef --version 7.0.0'  
+  - task: AzureCLI@2
+    displayName: 'Migration script'
     inputs:
-      command: build
-      projects: '**/*.csproj'
-      arguments: '--configuration release'
-  - task: DotNetCoreCLI@2
-    displayName: Dotnet Publish
+      azureSubscription: 'Azure Perficient Subscription'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: 'dotnet ef migrations script --project Persistence --output $(build.artifactStagingDirectory)/migration.sql --idempotent'
+      workingDirectory: 'aspnet-core/src'
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish script as artifact'
     inputs:
-      command: publish
-      publishWebProjects: True
-      arguments: '--configuration release --output $(Build.ArtifactStagingDirectory)'
-      zipAfterPublish: True
-  #- bash: ls -R $(Build.ArtifactStagingDirectory)
-  - task: PublishBuildArtifacts@1
-    displayName: Publish Artifacts
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
+      targetPath: '$(build.artifactStagingDirectory)/migration.sql'
+      artifact: 'migration.sql'
+      publishLocation: 'pipeline' 
+
+# - job: DockerHubPush
+#   steps:
+#   - task: Docker@2
+#     displayName: DockerHub Build and Push
+#     inputs:
+#       containerRegistry: 'DockerHub'
+#       repository: 'mancha24/reactivities'
+#       command: 'buildAndPush'
+#       Dockerfile: '**/Dockerfile'
+#       tags: '$(tag)'
+
+# - job: ACRPush
+#   steps:
+#   - task: Docker@2
+#     displayName: ACR Build and Push
+#     inputs:
+#       containerRegistry: 'ACR'
+#       repository: 'titaniumacr/reactivities'
+#       command: 'buildAndPush'
+#       Dockerfile: '**/Dockerfile'
+#       tags: '$(tag)'
+
+# - job: PublishArtifact
+#   steps:
+#   - task: UseDotNet@2
+#     displayName: NET Core Version
+#     inputs:
+#       version: '7.x'
+#       performMultiLevelLookup: true
+#       includePreviewVersions: true
+#   - task: DotNetCoreCLI@2
+#     displayName: Dotnet Restore
+#     inputs:
+#       command: restore
+#       feedsToUse: select
+#       #vstsFeed: 'my-vsts-feed' # A series of numbers and letters
+#   - task: DotNetCoreCLI@2
+#     displayName: Dotnet Build
+#     inputs:
+#       command: build
+#       projects: '**/*.csproj'
+#       arguments: '--configuration release'
+#   - task: DotNetCoreCLI@2
+#     displayName: Dotnet Publish
+#     inputs:
+#       command: publish
+#       publishWebProjects: True
+#       arguments: '--configuration release --output $(Build.ArtifactStagingDirectory)'
+#       zipAfterPublish: True
+#   #- bash: ls -R $(Build.ArtifactStagingDirectory)
+#   - task: PublishBuildArtifacts@1
+#     displayName: Publish Artifacts
+#     inputs:
+#       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#       ArtifactName: 'drop'
+#       publishLocation: 'Container'
