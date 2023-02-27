@@ -23,16 +23,16 @@ jobs:
       Dockerfile: '**/Dockerfile'
       tags: '$(tag)'
 
-# - job: ACRPush
-#   steps:
-#   - task: Docker@2
-#     displayName: ACR Build and Push
-#     inputs:
-#       containerRegistry: 'ACR'
-#       repository: 'titaniumacr/reactivities'
-#       command: 'buildAndPush'
-#       Dockerfile: '**/Dockerfile'
-#       tags: '$(tag)'
+- job: ACRPush
+  steps:
+  - task: Docker@2
+    displayName: ACR Build and Push
+    inputs:
+      containerRegistry: 'ACR'
+      repository: 'titaniumacr/reactivities'
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
+      tags: '$(tag)'
 
 - job: PublishArtifact
   steps:
