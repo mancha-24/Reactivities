@@ -35,7 +35,7 @@ jobs:
       azureSubscription: 'Azure Perficient Subscription'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
-      inlineScript: 'dotnet ef migrations script --project Persistence --output $(build.artifactStagingDirectory)/migration.sql --idempotent'
+      inlineScript: 'dotnet ef migrations script --project Persistence/Persistence.csproj --output $(build.artifactStagingDirectory)/migration.sql --idempotent'
       workingDirectory: 'aspnet-core/src'
   - task: PublishPipelineArtifact@1
     displayName: 'Publish script as artifact'
