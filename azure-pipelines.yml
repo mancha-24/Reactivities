@@ -28,16 +28,15 @@ jobs:
     inputs:
         command: 'custom'
         custom: 'tool'
-        arguments: 'install --global dotnet-ef --version 7.0.0'  
-  - bash: ls -R 
+        arguments: 'install --global dotnet-ef --version 7.0.0' 
   - task: AzureCLI@2
     displayName: 'Migration script'
     inputs:
       azureSubscription: 'Azure Perficient Subscription'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
-      inlineScript: 'dotnet ef migrations script --project Persistence/Persistence.csproj --output $(build.artifactStagingDirectory)/migration.sql --idempotent'
-      workingDirectory: 'aspnet-core/src'
+      inlineScript: 'dotnet ef migrations script --project Persistence.csproj --output $(build.artifactStagingDirectory)/migration.sql --idempotent'
+      workingDirectory: 'Persistence'
   - task: PublishPipelineArtifact@1
     displayName: 'Publish script as artifact'
     inputs:
