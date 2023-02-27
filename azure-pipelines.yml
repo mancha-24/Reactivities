@@ -1,5 +1,5 @@
 trigger:
-- azure-pipelines-build
+- azure-migrations
 - main
 
 pool:
@@ -29,6 +29,7 @@ jobs:
         command: 'custom'
         custom: 'tool'
         arguments: 'install --global dotnet-ef --version 7.0.0'  
+  - bash: ls -R 
   - task: AzureCLI@2
     displayName: 'Migration script'
     inputs:
