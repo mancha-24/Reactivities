@@ -76,7 +76,7 @@ jobs:
     inputs:
       command: custom
       custom: tool
-      arguments: 'install --global almops'
+      arguments: 'install almops'
   - bash: |
       almops config --org titaniumcorp --token $(System.AccessToken)
       almops update reactivitiesContainerTag -p $(System.Freelancer) --id 1 --type CommonVariables --var $(tag)
