@@ -26,6 +26,16 @@ jobs:
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
           TAG: $(tag)
 
+  - job: AzureRegistryPush
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'ReactivitiesContainer'
+        repository: 'reactivitiescontainerwebapp/reactivities'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+
 # - job: CreateMigrationScript
 #   displayName: 'Create migration script'
 #   condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'Manual'))
@@ -65,16 +75,6 @@ jobs:
 #     inputs:
 #       containerRegistry: 'DockerHub'
 #       repository: 'mancha24/reactivities'
-#       command: 'buildAndPush'
-#       Dockerfile: '**/Dockerfile'
-#       tags: '$(tag)'
-
-# - job: ACRPush
-#   steps:
-#   - task: Docker@2
-#     inputs:
-#       containerRegistry: 'ReactivitiesContainer'
-#       repository: 'reactivitiescontainerwebapp/reactivities'
 #       command: 'buildAndPush'
 #       Dockerfile: '**/Dockerfile'
 #       tags: '$(tag)'
