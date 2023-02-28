@@ -21,7 +21,7 @@ jobs:
         displayName: 'Assign environment variables'
         inputs:
           targetType: 'filePath'
-          filePath: 'setTagVarieble.ps1'
+          filePath: 'setTagVariable.ps1'
         env:
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
