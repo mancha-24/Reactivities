@@ -79,7 +79,7 @@ jobs:
       arguments: 'install --global almops'
   - bash: |
       almops config --org titaniumcorp --token $(System.AccessToken)
-      almops update variables -p $(System.Freelancer) --id 1 --type reactivitiesContainerTag --var $(tag)
+      almops update reactivitiesContainerTag -p $(System.Freelancer) --id 1 --type CommonVariables --var $(tag)
     displayName: 'Update Tag value'
 
 # - job: PublishArtifact
