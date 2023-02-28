@@ -1,4 +1,4 @@
-$VariableGroupId = $(variable.group.id)
+$VariableGroupId = 1
 $NewValue = "prueba"
 $VariableName = "reactivitiesContainerTag"
 Write-Host "NewValue : $NewValue"
