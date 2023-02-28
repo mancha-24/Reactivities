@@ -55,15 +55,32 @@ jobs:
 #       Dockerfile: '**/Dockerfile'
 #       tags: '$(tag)'
 
-- job: ACRPush
+# - job: ACRPush
+#   steps:
+#   - task: Docker@2
+#     inputs:
+#       containerRegistry: 'ReactivitiesContainer'
+#       repository: 'reactivitiescontainerwebapp/reactivities'
+#       command: 'buildAndPush'
+#       Dockerfile: '**/Dockerfile'
+#       tags: '$(tag)'
+
+- job: UpdateTagVariable
   steps:
-  - task: Docker@2
+  - task: UseDotNet@2
+    displayName: 'Get latest .NET SDK'
     inputs:
-      containerRegistry: 'ReactivitiesContainer'
-      repository: 'reactivitiescontainerwebapp/reactivities'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
-      tags: '$(tag)'
+      version: '7.x'
+  - task: DotNetCoreCLI@2
+    displayName: 'Install almops .NET global tool'
+    inputs:
+      command: custom
+      custom: tool
+      arguments: 'install --global almops'
+  - bash: |
+      almops config --org titaniumcorp --token $(System.AccessToken)
+      almops update variables -p $(System.Freelancer) --id 1 --type reactivitiesContainerTag --var $(tag)
+    displayName: 'Update Tag value'
 
 # - job: PublishArtifact
 #   steps:
