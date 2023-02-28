@@ -1,5 +1,5 @@
 $VariableGroupId = 1
-$NewValue = $($tag)
+$NewValue = $env:TAG
 $VariableName = "reactivitiesContainerTag"
 Write-Host "NewValue : $NewValue"
 $url = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$env:SYSTEM_TEAMPROJECTID/_apis/distributedtask/variablegroups/$($VariableGroupId)?api-version=5.1-preview.1"
