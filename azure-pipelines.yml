@@ -58,45 +58,44 @@ jobs:
 - job: ACRPush
   steps:
   - task: Docker@2
-    displayName: ACR Build and Push
     inputs:
       containerRegistry: 'ACR'
-      repository: 'titaniumacr/reactivities'
+      repository: 'reactivitiescontainerwebapp/reactivities' #'titaniumacr/reactivities'
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
-      tags: '$(tag)'
+      tags: 'latest'
 
-- job: PublishArtifact
-  steps:
-  - task: UseDotNet@2
-    displayName: NET Core Version
-    inputs:
-      version: '7.x'
-      performMultiLevelLookup: true
-      includePreviewVersions: true
-  - task: DotNetCoreCLI@2
-    displayName: Dotnet Restore
-    inputs:
-      command: restore
-      feedsToUse: select
-      #vstsFeed: 'my-vsts-feed' # A series of numbers and letters
-  - task: DotNetCoreCLI@2
-    displayName: Dotnet Build
-    inputs:
-      command: build
-      projects: '**/*.csproj'
-      arguments: '--configuration release'
-  - task: DotNetCoreCLI@2
-    displayName: Dotnet Publish
-    inputs:
-      command: publish
-      publishWebProjects: True
-      arguments: '--configuration release --output $(Build.ArtifactStagingDirectory)'
-      zipAfterPublish: True
-  #- bash: ls -R $(Build.ArtifactStagingDirectory)
-  - task: PublishBuildArtifacts@1
-    displayName: Publish Artifacts
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
+# - job: PublishArtifact
+#   steps:
+#   - task: UseDotNet@2
+#     displayName: NET Core Version
+#     inputs:
+#       version: '7.x'
+#       performMultiLevelLookup: true
+#       includePreviewVersions: true
+#   - task: DotNetCoreCLI@2
+#     displayName: Dotnet Restore
+#     inputs:
+#       command: restore
+#       feedsToUse: select
+#       #vstsFeed: 'my-vsts-feed' # A series of numbers and letters
+#   - task: DotNetCoreCLI@2
+#     displayName: Dotnet Build
+#     inputs:
+#       command: build
+#       projects: '**/*.csproj'
+#       arguments: '--configuration release'
+#   - task: DotNetCoreCLI@2
+#     displayName: Dotnet Publish
+#     inputs:
+#       command: publish
+#       publishWebProjects: True
+#       arguments: '--configuration release --output $(Build.ArtifactStagingDirectory)'
+#       zipAfterPublish: True
+#   #- bash: ls -R $(Build.ArtifactStagingDirectory)
+#   - task: PublishBuildArtifacts@1
+#     displayName: Publish Artifacts
+#     inputs:
+#       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#       ArtifactName: 'drop'
+#       publishLocation: 'Container'
