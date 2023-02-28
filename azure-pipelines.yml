@@ -59,8 +59,8 @@ jobs:
   steps:
   - task: Docker@2
     inputs:
-      containerRegistry: 'ACR'
-      repository: 'reactivitiescontainerwebapp/reactivities' #'titaniumacr/reactivities'
+      containerRegistry: 'ReactivitiesContainer'
+      repository: 'reactivitiescontainerwebapp/reactivities'
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
       tags: 'latest'
