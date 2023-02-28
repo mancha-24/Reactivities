@@ -21,7 +21,7 @@ namespace API.Extensions
                 services.AddSwaggerGen();
                 services.AddDbContext<DataContext>(opt =>
                 {
-                    opt.UseNpgsql(config.GetConnectionString("POSTGRESQLCONNSTR_DefaultConnection"));
+                    opt.UseNpgsql(config.GetConnectionString("DefaultConnection"));
                 });
 
                 services.AddCors(opt =>
