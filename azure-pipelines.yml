@@ -63,7 +63,7 @@ jobs:
       repository: 'reactivitiescontainerwebapp/reactivities'
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
-      tags: 'latest'
+      tags: '$(tag)'
 
 # - job: PublishArtifact
 #   steps:
