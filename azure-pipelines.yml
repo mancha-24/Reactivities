@@ -13,7 +13,7 @@ variables:
 
 jobs:
   - job: AsignEnviromentVariable
-    displayName: AsignNewVarieble
+    displayName: AsignNewTagVariable
     pool:
       vmImage: 'ubuntu-latest'
     steps:
@@ -24,6 +24,7 @@ jobs:
           filePath: 'setTagVariable.ps1'
         env:
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          TAG: $(tag)
 
 # - job: CreateMigrationScript
 #   displayName: 'Create migration script'
