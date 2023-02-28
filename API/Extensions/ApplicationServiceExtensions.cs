@@ -21,9 +21,7 @@ namespace API.Extensions
                 services.AddSwaggerGen();
                 services.AddDbContext<DataContext>(opt =>
                 {
-                    // opt.UseNpgsql(config.GetConnectionString("DefaultConnection"));
-                    opt.UseNpgsql(config.GetConnectionString("Server=pgltitanium.postgres.database.azure.com; Port=5432; User Id=titan@pgltitanium; Password=$3cr3tPassword; Database=reactivities"));
-                    
+                    opt.UseNpgsql(config.GetConnectionString("DefaultConnection"));
                 });
 
                 services.AddCors(opt =>
