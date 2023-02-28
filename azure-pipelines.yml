@@ -52,7 +52,7 @@ jobs:
     - task: Docker@2
       inputs:
         containerRegistry: 'ReactivitiesContainer'
-        repository: 'reactivitiescontainerwebapp/reactivities'
+        repository: 'reactivities'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
